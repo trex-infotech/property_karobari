@@ -12,7 +12,7 @@ export default function PageBanner({
   breadcrumb?: Crumb[];
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-blue-100 bg-linear-to-br from-blue-50 via-white to-blue-100/60 text-zinc-900">
+    <section className="relative overflow-hidden border-b border-blue-800 bg-linear-to-br from-blue-950 via-blue-900 to-blue-950 text-blue-200">
       <svg
         className="pointer-events-none absolute inset-0 h-full w-full"
         viewBox="0 0 1440 260"
@@ -34,13 +34,13 @@ export default function PageBanner({
         <path
           d="M-40 90 C 400 170, 800 20, 1480 110"
           fill="none"
-          stroke="rgba(37, 99, 235, 0.15)"
+          stroke="rgba(147, 197, 253, 0.18)"
           strokeWidth="1.5"
         />
         <path
           d="M900 -20 C 1050 60, 1250 40, 1480 -30"
           fill="none"
-          stroke="rgba(37, 99, 235, 0.2)"
+          stroke="rgba(147, 197, 253, 0.22)"
           strokeWidth="2"
         />
       </svg>
@@ -49,7 +49,7 @@ export default function PageBanner({
         {breadcrumb && breadcrumb.length > 0 && (
           <nav
             aria-label="Breadcrumb"
-            className="mb-3 text-xs font-medium text-zinc-500 sm:text-sm"
+            className="mb-3 text-xs font-medium text-blue-300 sm:text-sm"
           >
             <ol className="flex flex-wrap items-center justify-center gap-1.5">
               {breadcrumb.map((crumb, index) => {
@@ -57,17 +57,17 @@ export default function PageBanner({
 
                 return (
                   <li key={index} className="flex items-center gap-1.5">
-                    {index > 0 && <span className="text-zinc-300">/</span>}
+                    {index > 0 && <span className="text-blue-700">/</span>}
                     {crumb.href && !isLast ? (
                       <Link
                         href={crumb.href}
-                        className="transition-colors hover:text-blue-600"
+                        className="transition-colors hover:text-white"
                       >
                         {crumb.label}
                       </Link>
                     ) : (
                       <span
-                        className={isLast ? "text-blue-600" : undefined}
+                        className={isLast ? "text-blue-300" : undefined}
                         aria-current={isLast ? "page" : undefined}
                       >
                         {crumb.label}
@@ -80,11 +80,11 @@ export default function PageBanner({
           </nav>
         )}
 
-        <h1 className="text-3xl font-bold tracking-tight text-blue-950 sm:text-5xl">
+        <h1 className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
           {title}
         </h1>
         {subtitle && (
-          <p className="mx-auto mt-3 max-w-xl text-sm text-zinc-600 sm:text-base">
+          <p className="mx-auto mt-3 max-w-xl text-sm text-blue-200/80 sm:text-base">
             {subtitle}
           </p>
         )}

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Footer from "./components/footer";
 import FooterVisibility from "./components/footer-visibility";
 import Navbar from "./components/navbar";
+import VisitTracker from "./components/visit-tracker";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Navbar />
         </Suspense>
         {children}
+        <VisitTracker />
         <Suspense fallback={null}>
           <FooterVisibility>
             <Footer />

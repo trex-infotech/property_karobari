@@ -72,7 +72,7 @@ export default async function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-blue-100 bg-blue-50/60 text-zinc-600">
+    <footer className="border-t border-blue-800 bg-blue-950 text-blue-200">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -93,11 +93,11 @@ export default async function Footer() {
                   <polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
               </span>
-              <span className="text-lg font-bold tracking-tight text-zinc-900">
-                Property <span className="text-blue-600">Karobari</span>
+              <span className="text-lg font-bold tracking-tight text-white">
+                Property <span className="text-blue-400">Karobari</span>
               </span>
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-zinc-500">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-blue-300/80">
               Buy, rent, or find a PG — explore verified properties across top
               cities.
             </p>
@@ -116,7 +116,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-900">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
               Properties
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
@@ -124,7 +124,7 @@ export default async function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="transition-colors hover:text-blue-600"
+                    className="transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -134,7 +134,7 @@ export default async function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-900">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
               Company
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm">
@@ -142,7 +142,7 @@ export default async function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="transition-colors hover:text-blue-600"
+                    className="transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
@@ -152,12 +152,12 @@ export default async function Footer() {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-900">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
               Get in Touch
             </h3>
             <ul className="mt-4 space-y-3 text-sm">
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 text-blue-600">
+                <span className="mt-0.5 text-blue-400">
                   <Icon
                     stroke
                     path={
@@ -171,7 +171,7 @@ export default async function Footer() {
                 Mumbai, Maharashtra, India
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 text-blue-600">
+                <span className="mt-0.5 text-blue-400">
                   <Icon
                     stroke
                     path={
@@ -182,7 +182,7 @@ export default async function Footer() {
                 +91 98765 43210
               </li>
               <li className="flex items-start gap-3">
-                <span className="mt-0.5 text-blue-600">
+                <span className="mt-0.5 text-blue-400">
                   <Icon
                     stroke
                     path={
@@ -199,7 +199,7 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-blue-100 pt-6 text-center text-xs text-zinc-500">
+        <div className="mt-12 border-t border-blue-800 pt-6 text-center text-xs text-blue-300/70">
           © {year} Property Karobari. All rights reserved.
         </div>
       </div>

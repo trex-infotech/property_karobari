@@ -31,6 +31,7 @@ const indexes = [
   ["employees", { managerId: 1 }],
   ["admins", { email: 1 }],
   ["sessions", { token: 1 }],
+  ["visits", { day: 1 }, { unique: true }],
   ["sessions", { expiresAt: 1 }, { expireAfterSeconds: 0 }],
 ];
 
