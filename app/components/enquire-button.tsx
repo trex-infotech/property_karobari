@@ -198,6 +198,48 @@ function EnquiryModal({
   );
 }
 
+export function EnquireTrigger({
+  propertyId,
+  propertyTitle,
+  propertyUrl,
+  className,
+  children,
+}: {
+  propertyId: string;
+  propertyTitle: string;
+  propertyUrl: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={(e) => {
+          // Locked fields live inside links/cards — don't let the
+          // click navigate or trigger the parent element.
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+        }}
+        className={className}
+      >
+        {children}
+      </button>
+      {open && (
+        <EnquiryModal
+          propertyId={propertyId}
+          propertyTitle={propertyTitle}
+          propertyUrl={propertyUrl}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </>
+  );
+}
+
 export default function EnquireButton({
   propertyId,
   propertyTitle,

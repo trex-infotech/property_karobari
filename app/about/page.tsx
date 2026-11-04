@@ -99,8 +99,8 @@ export default function AboutPage() {
               Who We Are
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-zinc-600 sm:text-base">
-              Property Karobari started with a simple idea: finding a home
-              shouldn&apos;t be complicated. Whether you&apos;re buying your
+              SINGHRANI CONSULTANCY SERVICES started with a simple idea: finding
+              a home shouldn&apos;t be complicated. Whether you&apos;re buying your
               first flat, renting near your office, looking for a PG, or
               investing in a new launch — we bring every option together in one
               place.
@@ -128,6 +128,18 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="mt-14 rounded-2xl bg-linear-to-r from-blue-600 to-blue-800 px-8 py-8 text-center shadow-lg sm:px-10">
+          <p className="text-xs font-semibold uppercase tracking-widest text-blue-200">
+            Operated by
+          </p>
+          <h2 className="mt-2 text-xl font-bold tracking-wide text-white sm:text-2xl">
+            SINGHRANI CONSULTANCY SERVICES
+          </h2>
+          <p className="mt-3 inline-block rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-blue-100">
+            MahaRERA Agent Reg. No.: A031242605002
+          </p>
         </div>
 
         <div className="mt-14">

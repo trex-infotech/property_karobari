@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getPublishedBlogs } from "@/app/lib/blogs";
 import PageBanner from "@/app/components/page-banner";
 import { stripHtml, type Blog } from "@/app/lib/blog-utils";
+import { formatDate } from "@/app/lib/format-date";
 
 // Reads MongoDB at request time.
 export const instant = false;
@@ -14,14 +15,7 @@ export const metadata: Metadata = {
 };
 
 function formatBlogDate(value: string | null) {
-  if (!value) return "";
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
+  return value ? formatDate(value) : "";
 }
 
 function BlogCard({ blog }: { blog: Blog }) {

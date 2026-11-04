@@ -3,6 +3,7 @@ import "server-only";
 import { randomBytes } from "crypto";
 import { ObjectId } from "mongodb";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { getDb } from "./mongodb";
 
 const SESSION_COOKIE = "admin_session";
@@ -32,6 +33,9 @@ export async function createSession(adminId: ObjectId, email: string) {
 }
 
 export async function getSession() {
+  // Sessions are inherently request-time — also keeps the new Date()
+  // expiry check below out of the prerenderer's unstable-value check.
+  await connection();
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   if (!token) return null;

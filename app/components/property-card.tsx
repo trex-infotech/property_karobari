@@ -6,6 +6,12 @@ import {
   listingTypeToPath,
 } from "@/app/lib/property-format";
 
+const dateFmt = new Intl.DateTimeFormat("en-IN", {
+  day: "2-digit",
+  month: "short",
+  year: "numeric",
+});
+
 export default function PropertyCard({
   property,
 }: {
@@ -33,7 +39,7 @@ export default function PropertyCard({
         {property.thumbnail ? (
           <Image
             src={property.thumbnail}
-            alt={property.title || "Property"}
+            alt={property.societyName || "Property"}
             fill
             sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
             className="object-cover"
@@ -47,7 +53,7 @@ export default function PropertyCard({
 
       <div className="flex flex-1 flex-col p-5">
         <h3 className="line-clamp-1 text-lg font-bold text-blue-900">
-          {property.title || "Untitled property"}
+          {property.societyName || "Untitled property"}
         </h3>
         <p className="mt-1 line-clamp-1 text-sm text-zinc-500">
           {[property.location, property.city].filter(Boolean).join(", ") ||
@@ -61,12 +67,19 @@ export default function PropertyCard({
         )}
 
         <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-3">
-          <span className="text-lg font-bold text-blue-600">
-            {price ?? "Price on request"}
-            {price && isRentLike && (
-              <span className="text-xs font-medium text-zinc-500">/month</span>
+          <div>
+            <span className="text-lg font-bold text-blue-600">
+              {price ?? "Price on request"}
+              {price && isRentLike && (
+                <span className="text-xs font-medium text-zinc-500">/month</span>
+              )}
+            </span>
+            {property.createdAt && (
+              <p className="mt-0.5 text-xs text-zinc-500">
+                Posted on {dateFmt.format(new Date(property.createdAt))}
+              </p>
             )}
-          </span>
+          </div>
           <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-900 transition-colors group-hover:text-blue-600">
             View details
             <svg

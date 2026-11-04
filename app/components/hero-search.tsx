@@ -7,7 +7,9 @@ const tabs = [
   { value: "buy", label: "Buy" },
   { value: "rent", label: "Rent" },
   { value: "pg", label: "PG" },
-  { value: "new-launch", label: "New Arrival" },
+  { value: "new-launch", label: "New Launch" },
+  { value: "preleased", label: "Preleased" },
+  { value: "auction", label: "Auction" },
 ];
 
 const propertyTypes = [
@@ -17,37 +19,42 @@ const propertyTypes = [
   { label: "Villa", value: "Villa" },
   { label: "Shop", value: "Shop" },
   { label: "Office Space", value: "Office Space" },
+  { label: "Gala", value: "Gala" },
+  { label: "Bungalow", value: "Bungalow" },
+  { label: "Open Plot", value: "Open Plot" },
 ];
 
 type BudgetOption = { label: string; min?: number; max?: number };
 
 const buyBudgets: BudgetOption[] = [
-  { label: "Upto ₹12 lakhs", max: 12_00_000 },
-  { label: "₹25 - 50 lakhs", min: 25_00_000, max: 50_00_000 },
-  { label: "₹50 lakhs - 1 crore", min: 50_00_000, max: 1_00_00_000 },
-  { label: "₹1 - 2 cr", min: 1_00_00_000, max: 2_00_00_000 },
-  { label: "₹2 cr plus", min: 2_00_00_000 },
+  { label: "Up to ₹25 Lakh", max: 25_00_000 },
+  { label: "₹25 Lakh – ₹50 Lakh", min: 25_00_000, max: 50_00_000 },
+  { label: "₹50 Lakh – ₹1 Crore", min: 50_00_000, max: 1_00_00_000 },
+  { label: "Up to ₹5 Crore", max: 5_00_00_000 },
+  { label: "Above ₹5 Crore", min: 5_00_00_000 },
 ];
 
 const rentBudgets: BudgetOption[] = [
   { label: "Under ₹20,000", max: 20_000 },
   { label: "₹20,000 - 50,000", min: 20_000, max: 50_000 },
-  { label: "₹50,000 - 1 lakh", min: 50_000, max: 1_00_000 },
-  { label: "₹1 - 2 lakh", min: 1_00_000, max: 2_00_000 },
-  { label: "₹2 lakh plus", min: 2_00_000 },
+  { label: "₹50,000 – ₹1 Lakh", min: 50_000, max: 1_00_000 },
+  { label: "₹1 Lakh – ₹2 Lakh", min: 1_00_000, max: 2_00_000 },
+  { label: "Above ₹2 Lakh", min: 2_00_000 },
 ];
 
 const pgBudgets: BudgetOption[] = [
   { label: "Under ₹5,000", max: 5_000 },
-  { label: "₹5,000 - 10,000", min: 5_000, max: 10_000 },
-  { label: "₹10,000 - 15,000", min: 10_000, max: 15_000 },
-  { label: "₹15,000 - 25,000", min: 15_000, max: 25_000 },
-  { label: "₹25,000 plus", min: 25_000 },
+  { label: "₹5,000 – ₹10,000", min: 5_000, max: 10_000 },
+  { label: "₹10,000 – ₹15,000", min: 10_000, max: 15_000 },
+  { label: "₹15,000 – ₹25,000", min: 15_000, max: 25_000 },
+  { label: "Above ₹25,000", min: 25_000 },
 ];
 
 const budgetsByTab: Record<string, BudgetOption[]> = {
   buy: buyBudgets,
   "new-launch": buyBudgets,
+  preleased: buyBudgets,
+  auction: buyBudgets,
   rent: rentBudgets,
   pg: pgBudgets,
 };
@@ -288,7 +295,7 @@ export default function HeroSearch({ cities }: { cities: CityOption[] }) {
             value={budget}
             onChange={setBudget}
             options={[
-              { label: "Any budget", value: "" },
+              { label: "Any Budget", value: "" },
               ...(budgetsByTab[tab] ?? []).map((b, i) => ({
                 label: b.label,
                 value: String(i),

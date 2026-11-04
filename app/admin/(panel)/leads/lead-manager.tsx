@@ -1,19 +1,14 @@
 "use client";
 
+import { formatDateTime as formatCreated } from "@/app/lib/format-date";
 import { useActionState, useState } from "react";
 import { deleteLead, setLeadActive } from "@/app/actions/leads";
 import type { Lead } from "@/app/lib/leads";
+import ExportButton from "../export-button";
 
 const inputClass =
   "w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20";
 
-function formatCreated(iso: string | null) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime())
-    ? "-"
-    : `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
-}
 
 function StatusBadge({ active }: { active: boolean }) {
   return (
@@ -66,6 +61,27 @@ export default function LeadManager({ leads }: { leads: Lead[] }) {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <ExportButton
+            filename="leads.csv"
+            headers={[
+              "Name",
+              "Phone",
+              "Preferred Contact",
+              "Preferred Time",
+              "Property",
+              "Status",
+              "Received",
+            ]}
+            rows={filtered.map((lead) => [
+              lead.name,
+              lead.phone,
+              lead.preferredContactMethod,
+              lead.preferredContactTime,
+              lead.propertyTitle,
+              lead.active ? "Active" : "Closed",
+              formatCreated(lead.createdAt),
+            ])}
+          />
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value as "active" | "closed")}

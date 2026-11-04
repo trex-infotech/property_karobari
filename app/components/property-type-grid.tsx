@@ -10,6 +10,9 @@ const CATEGORIES = [
   { type: "Villa", bg: "bg-[#fbe0dc]", img: "/villa.png" },
   { type: "Shop", bg: "bg-[#e6e0f8]", img: "/shop.png" },
   { type: "Office Space", bg: "bg-[#d7f0f5]", img: "/office.png" },
+  { type: "Gala", bg: "bg-[#e3e9f6]", img: "/shop.png" },
+  { type: "Bungalow", bg: "bg-[#f6e3ef]", img: "/villa.png" },
+  { type: "Open Plot", bg: "bg-[#e8f3e3]", img: "/rowhouse.png" },
 ];
 
 export default async function PropertyTypeGrid() {

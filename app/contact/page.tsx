@@ -47,8 +47,8 @@ const contactInfo = [
   },
   {
     label: "Email",
-    value: "info@propertykarobari.com",
-    href: "mailto:info@propertykarobari.com",
+    value: "propertykarobari@gmail.com",
+    href: "mailto:propertykarobari@gmail.com",
     icon: (
       <>
         <rect x="2" y="4" width="20" height="16" rx="2" />

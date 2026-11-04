@@ -3,6 +3,8 @@ export const LISTING_LABELS: Record<string, string> = {
   rent: "Rent",
   pg: "PG",
   new_launch: "New Launch",
+  preleased: "Preleased",
+  auction: "Auction",
 };
 
 export function listingLabel(listingType: string) {
@@ -47,6 +49,18 @@ export const PROPERTY_PAGES: Record<
     label: "New Launch",
     heading: "New Launch Projects",
     tagline: "Discover the latest projects open for early booking.",
+  },
+  preleased: {
+    listingType: "preleased",
+    label: "Preleased",
+    heading: "Preleased Properties",
+    tagline: "Pre-leased assets offering steady rental income from day one.",
+  },
+  auction: {
+    listingType: "auction",
+    label: "Auction",
+    heading: "Auction Properties",
+    tagline: "Bid on bank and institution auctioned properties.",
   },
 };
 

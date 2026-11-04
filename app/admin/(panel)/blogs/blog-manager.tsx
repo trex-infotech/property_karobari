@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDateTime as formatCreated } from "@/app/lib/format-date";
 import dynamic from "next/dynamic";
 import { useActionState, useEffect, useMemo, useState } from "react";
 import "react-quill-new/dist/quill.snow.css";
@@ -45,13 +46,6 @@ function formatDateTimeForInput(iso: string | null) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
-function formatCreated(iso: string | null) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime())
-    ? "-"
-    : `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
-}
 
 function Modal({
   title,

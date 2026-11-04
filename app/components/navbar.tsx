@@ -8,13 +8,25 @@ const propertyLinks = [
   { href: "/properties/buy", label: "Buy" },
   { href: "/properties/rent", label: "Rent" },
   { href: "/properties/pg", label: "PG" },
+  { href: "/properties/preleased", label: "Preleased" },
+  { href: "/properties/auction", label: "Auction" },
+  { href: "/properties/new-launch", label: "New Launch" },
 ];
 
-const navLinks = [
-  { href: "/properties/new-launch", label: "New Launch" },
-  { href: "/about", label: "About" },
-  { href: "/blogs", label: "Blogs" },
-  { href: "/contact", label: "Contact" },
+const navLinks: { href: string; label: string }[] = [];
+
+const darkBannerRoutes = [
+  "/about",
+  "/blogs",
+  "/career",
+  "/contact",
+  "/feedback",
+  "/interior",
+  "/loans",
+  "/preleased",
+  "/privacy-policy",
+  "/properties",
+  "/refer-n-earn",
 ];
 
 const socialLinks = [
@@ -49,7 +61,7 @@ function isActive(pathname: string, href: string) {
 }
 
 function linkClass(active: boolean) {
-  return `rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+  return `rounded-full px-4 py-2 text-base font-medium transition-colors ${
     active
       ? "bg-blue-50 text-blue-600"
       : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
@@ -80,7 +92,7 @@ function SocialIcon({ path }: { path: React.ReactNode }) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="h-4 w-4"
+      className="h-5 w-5"
       aria-hidden="true"
     >
       {path}
@@ -94,39 +106,38 @@ export default function Navbar() {
   const [mobilePropertiesOpen, setMobilePropertiesOpen] = useState(false);
   const [desktopPropertiesOpen, setDesktopPropertiesOpen] = useState(false);
   const propertiesActive = isActive(pathname, "/properties");
+  const onDarkBanner = darkBannerRoutes.some((route) =>
+    isActive(pathname, route),
+  );
 
   if (pathname.startsWith("/admin")) return null;
 
   return (
     <header className="fixed inset-x-0 top-3 z-50 px-3 sm:px-4">
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between rounded-full border border-zinc-200 bg-white/90 px-4 shadow-lg backdrop-blur sm:px-5">
+      <span
+        className={`absolute -top-1 right-6 text-[11px] font-bold leading-none tracking-wide sm:right-8 sm:text-xs ${
+          onDarkBanner
+            ? "text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]"
+            : "text-[#172554]"
+        }`}
+      >
+        MahaRERA Agent Reg. No.: A031242605002
+      </span>
+      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between rounded-full border border-zinc-200 bg-white/90 px-4 shadow-lg backdrop-blur sm:h-16 sm:px-5">
         <Link
           href="/"
           className="flex items-center gap-2"
           onClick={() => setMobileOpen(false)}
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="h-4.5 w-4.5"
-              aria-hidden="true"
-            >
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-          </span>
-          <span className="text-base font-bold tracking-tight text-zinc-900">
-            Property <span className="text-blue-600">Karobari</span>
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/property-karobari-logo-mark.png"
+            alt="Property Karobari"
+            className="-mt-4 -ml-2 h-12 w-auto object-contain sm:h-14"
+          />
         </Link>
 
-        <div className="hidden items-center gap-0.5 md:flex">
+        <div className="hidden items-center gap-0.5 md:-ml-6 md:flex">
           <div
             className="relative"
             onMouseEnter={() => setDesktopPropertiesOpen(true)}
@@ -142,9 +153,9 @@ export default function Navbar() {
                 if (event.key === "Escape") setDesktopPropertiesOpen(false);
               }}
             >
-              Properties
+              All Properties
               <ChevronDown
-                className={`h-4 w-4 transition-transform ${
+                className={`h-5 w-5 transition-transform ${
                   desktopPropertiesOpen ? "rotate-180" : ""
                 }`}
               />
@@ -157,7 +168,7 @@ export default function Navbar() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setDesktopPropertiesOpen(false)}
-                      className={`block px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`block px-4 py-2.5 text-base font-medium transition-colors ${
                         isActive(pathname, link.href)
                           ? "bg-blue-50 text-blue-600"
                           : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
@@ -182,13 +193,13 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="hidden items-center gap-1.5 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
           {socialLinks.map((social) => (
             <a
               key={social.label}
               href={social.href}
               aria-label={social.label}
-              className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-zinc-100 ${social.color}`}
+              className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-zinc-100 ${social.color}`}
             >
               <SocialIcon path={social.icon} />
             </a>
@@ -197,7 +208,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 md:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 md:hidden"
           aria-expanded={mobileOpen}
           aria-label="Toggle navigation menu"
           onClick={() => setMobileOpen((open) => !open)}
@@ -211,7 +222,7 @@ export default function Navbar() {
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-6 w-6"
+              className="h-7 w-7"
               aria-hidden="true"
             >
               <path d="M18 6 6 18" />
@@ -226,7 +237,7 @@ export default function Navbar() {
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-6 w-6"
+              className="h-7 w-7"
               aria-hidden="true"
             >
               <line x1="4" x2="20" y1="6" y2="6" />
@@ -246,9 +257,9 @@ export default function Navbar() {
               aria-expanded={mobilePropertiesOpen}
               onClick={() => setMobilePropertiesOpen((open) => !open)}
             >
-              Properties
+              All Properties
               <ChevronDown
-                className={`h-4 w-4 transition-transform ${
+                className={`h-5 w-5 transition-transform ${
                   mobilePropertiesOpen ? "rotate-180" : ""
                 }`}
               />

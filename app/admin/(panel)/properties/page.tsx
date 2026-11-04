@@ -10,10 +10,19 @@ export const metadata: Metadata = {
   title: "Properties | Admin",
 };
 
+// Reads MongoDB at request time.
+export const instant = false;
+
 const inr = new Intl.NumberFormat("en-IN", {
   style: "currency",
   currency: "INR",
   maximumFractionDigits: 0,
+});
+
+const dateFmt = new Intl.DateTimeFormat("en-IN", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
 });
 
 const listingLabels: Record<string, string> = {
@@ -21,6 +30,8 @@ const listingLabels: Record<string, string> = {
   rent: "Rent",
   pg: "PG",
   new_launch: "New Launch",
+  preleased: "Preleased",
+  auction: "Auction",
 };
 
 function toPropertyRecord(
@@ -38,7 +49,8 @@ function toPropertyRecord(
     id: String(property._id),
     listingType: String(property.listingType ?? "sale"),
     status: String(property.status ?? "published"),
-    title: strOrNull(property.title),
+    societyName:
+      strOrNull(property.societyName) ?? strOrNull(property.title),
     propertyType: strOrNull(property.propertyType),
     floor: numOrNull(property.floor),
     totalFloors: numOrNull(property.totalFloors),
@@ -51,6 +63,10 @@ function toPropertyRecord(
       type: strOrNull(parking.type),
     },
     constructionStatus: strOrNull(property.constructionStatus),
+    transactionType: strOrNull(property.transactionType),
+    reraNumber: strOrNull(property.reraNumber),
+    builderName: strOrNull(property.builderName),
+    saleStatus: strOrNull(property.saleStatus),
     price: numOrNull(property.price),
     deposit: numOrNull(property.deposit),
     availableFor: arr(property.availableFor),
@@ -59,15 +75,35 @@ function toPropertyRecord(
     totalCapacity: strOrNull(property.totalCapacity),
     possessionIn: strOrNull(property.possessionIn),
     startingFrom: numOrNull(property.startingFrom),
+    suitableFor: strOrNull(property.suitableFor),
+    leaseAmount: numOrNull(property.leaseAmount),
+    rentalYield: numOrNull(property.rentalYield),
+    totalLeaseTenure: strOrNull(property.totalLeaseTenure),
+    balanceLeaseTenure: strOrNull(property.balanceLeaseTenure),
+    tenantType: strOrNull(property.tenantType),
+    possessionType: strOrNull(property.possessionType),
+    reservePrice: numOrNull(property.reservePrice),
+    emdAmount: numOrNull(property.emdAmount),
+    emdDate: strOrNull(property.emdDate),
+    inspectionDate: strOrNull(property.inspectionDate),
+    bankName: strOrNull(property.bankName),
     address: strOrNull(property.address),
     city: strOrNull(property.city),
     location: strOrNull(property.location),
     furnishing: strOrNull(property.furnishing),
+    buildingAge: strOrNull(property.buildingAge),
+    facing: strOrNull(property.facing),
     amenities: arr(property.amenities),
+    highlights: arr(property.highlights),
     thumbnail: strOrNull(property.thumbnail),
     images: arr(property.images),
     videos: arr(property.videos),
     brochure: strOrNull(property.brochure),
+    createdAt:
+      property.createdAt instanceof Date
+        ? property.createdAt.toISOString()
+        : strOrNull(property.createdAt),
+    restrictedFields: [],
   };
 }
 
@@ -114,11 +150,12 @@ export default async function AdminPropertiesPage() {
           <table className="w-full text-left text-sm">
             <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
               <tr>
-                <th className="px-4 py-3">Title</th>
+                <th className="px-4 py-3">Society / Project</th>
                 <th className="px-4 py-3">Listing</th>
                 <th className="px-4 py-3">Type</th>
                 <th className="px-4 py-3">Price</th>
                 <th className="hidden px-4 py-3 sm:table-cell">City</th>
+                <th className="hidden px-4 py-3 sm:table-cell">Posted</th>
                 <th className="px-4 py-3">Status</th>
                 <th className="w-48 px-4 py-3 text-right">Actions</th>
               </tr>
@@ -130,7 +167,7 @@ export default async function AdminPropertiesPage() {
                 return (
                   <tr key={record.id} className="hover:bg-zinc-50">
                   <td className="px-4 py-3 font-medium text-zinc-900">
-                    {property.title || "Untitled"}
+                    {record.societyName || "Untitled"}
                   </td>
                   <td className="px-4 py-3 text-zinc-600">
                     {listingLabels[property.listingType] ?? property.listingType}
@@ -143,6 +180,11 @@ export default async function AdminPropertiesPage() {
                   </td>
                   <td className="hidden px-4 py-3 text-zinc-600 sm:table-cell">
                     {property.city ?? "—"}
+                  </td>
+                  <td className="hidden px-4 py-3 text-zinc-600 sm:table-cell">
+                    {record.createdAt
+                      ? dateFmt.format(new Date(record.createdAt))
+                      : "—"}
                   </td>
                   <td className="px-4 py-3">
                     <span
@@ -164,7 +206,7 @@ export default async function AdminPropertiesPage() {
                       />
                       <DeletePropertyButton
                         propertyId={record.id}
-                        title={record.title ?? "this property"}
+                        title={record.societyName ?? "this property"}
                       />
                     </div>
                   </td>

@@ -1,22 +1,17 @@
 "use client";
 
+import { formatDateTime as formatCreated } from "@/app/lib/format-date";
 import { useActionState, useState } from "react";
 import {
   deleteEnquiry,
   setEnquiryActive,
 } from "@/app/actions/enquiries";
 import type { Enquiry } from "@/app/lib/enquiries";
+import ExportButton from "../export-button";
 
 const inputClass =
   "w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20";
 
-function formatCreated(iso: string | null) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime())
-    ? "-"
-    : `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
-}
 
 function StatusBadge({ active }: { active: boolean }) {
   return (
@@ -76,6 +71,19 @@ export default function EnquiryManager({
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <ExportButton
+            filename="enquiries.csv"
+            headers={["Name", "Email", "Phone", "Subject", "Message", "Status", "Received"]}
+            rows={filtered.map((enquiry) => [
+              enquiry.name,
+              enquiry.email,
+              enquiry.phone,
+              enquiry.subject,
+              enquiry.message,
+              enquiry.active ? "Open" : "Closed",
+              formatCreated(enquiry.createdAt),
+            ])}
+          />
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value as "open" | "closed")}

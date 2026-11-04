@@ -1,17 +1,58 @@
 import Link from "next/link";
 import { connection } from "next/server";
 
-const propertyLinks = [
-  { href: "/properties/buy", label: "Buy" },
-  { href: "/properties/rent", label: "Rent" },
-  { href: "/properties/pg", label: "PG" },
-  { href: "/properties/new-launch", label: "New Launch" },
-];
-
 const companyLinks = [
   { href: "/about", label: "About Us" },
   { href: "/blogs", label: "Blogs" },
   { href: "/contact", label: "Contact" },
+  { href: "/career", label: "Career" },
+  { href: "/refer-n-earn", label: "Refer N Earn" },
+  { href: "/feedback", label: "Feedback" },
+  { href: "/privacy-policy", label: "Privacy Policy" },
+];
+
+const serviceLinks = [
+  { href: "/properties/buy", label: "Buy" },
+  { href: "/properties/rent", label: "Rent" },
+  { href: "/properties/pg", label: "PG" },
+  { href: "/properties/preleased", label: "Preleased" },
+  { href: "/properties/auction", label: "Auction" },
+  { href: "/properties/new-launch", label: "New Launch" },
+  { href: "/loans", label: "Loans" },
+  { href: "/interior", label: "Interior" },
+];
+
+const partnerLinks = [
+  {
+    name: "MahaRERA",
+    description: "Regulatory",
+    href: "https://maharera.maharashtra.gov.in",
+  },
+  {
+    name: "MCHI-CREDAI",
+    description: "Industry Association",
+    href: "https://mchi.net",
+  },
+  {
+    name: "IGR Maharashtra",
+    description: "Registration & Stamp Department",
+    href: "https://igrmaharashtra.gov.in",
+  },
+  {
+    name: "CERSAI",
+    description: "Public Registry",
+    href: "https://www.cersai.org.in/CERSAI/home.prg",
+  },
+  {
+    name: "MoHUA",
+    description: "Portal",
+    href: "https://mohua.gov.in",
+  },
+  {
+    name: "FinvestCorp",
+    description: "Our Loan Solution Partner",
+    href: "https://finvestcorp.com",
+  },
 ];
 
 const socialLinks = [
@@ -74,34 +115,21 @@ export default async function Footer() {
   return (
     <footer className="border-t border-blue-800 bg-blue-950 text-blue-200">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div>
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                >
-                  <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                  <polyline points="9 22 9 12 15 12 15 22" />
-                </svg>
-              </span>
-              <span className="text-lg font-bold tracking-tight text-white">
-                Property <span className="text-blue-400">Karobari</span>
-              </span>
+            <Link href="/" className="-mt-2 flex justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/property-karobari-logo.png"
+                alt="Property Karobari"
+                className="h-auto w-full max-w-[300px] object-contain"
+              />
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-blue-300/80">
+            <p className="mt-2 max-w-xs text-center text-sm leading-relaxed text-blue-200">
               Buy, rent, or find a PG — explore verified properties across top
               cities.
             </p>
-            <div className="mt-5 flex gap-3">
+            <div className="mt-1 flex justify-center gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -113,24 +141,6 @@ export default async function Footer() {
                 </a>
               ))}
             </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Properties
-            </h3>
-            <ul className="mt-4 space-y-2.5 text-sm">
-              {propertyLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </div>
 
           <div>
@@ -153,8 +163,57 @@ export default async function Footer() {
 
           <div>
             <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+              Services
+            </h3>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              {serviceLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="transition-colors hover:text-white"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+              Useful Links & Partners
+            </h3>
+            <ul className="mt-4 space-y-3 text-sm">
+              {partnerLinks.map((partner) => (
+                <li key={partner.href}>
+                  <a
+                    href={partner.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-blue-100 transition-colors hover:text-white"
+                  >
+                    {partner.name}
+                  </a>
+                  <span className="block text-xs text-blue-300/60">
+                    {partner.description}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
               Get in Touch
             </h3>
+            <div className="mt-4">
+              <p className="text-sm font-semibold tracking-wide text-white">
+                SINGHRANI CONSULTANCY SERVICES
+              </p>
+              <p className="mt-1 text-xs text-blue-300/80">
+                MahaRERA Agent Reg. No.: A031242605002
+              </p>
+            </div>
             <ul className="mt-4 space-y-3 text-sm">
               <li className="flex items-start gap-3">
                 <span className="mt-0.5 text-blue-400">
@@ -193,14 +252,21 @@ export default async function Footer() {
                     }
                   />
                 </span>
-                info@propertykarobari.com
+                <a
+                  href="mailto:propertykarobari@gmail.com"
+                  className="transition-colors hover:text-white"
+                >
+                  propertykarobari@gmail.com
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-blue-800 pt-6 text-center text-xs text-blue-300/70">
-          © {year} Property Karobari. All rights reserved.
+        <div className="mt-12 border-t border-blue-800 pt-6 text-center">
+          <p className="text-xs text-blue-300/70">
+            © {year} Property Karobari. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

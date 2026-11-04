@@ -3,6 +3,7 @@
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
+import { hasRecentSubmission } from "@/app/lib/dedupe";
 import { getDb } from "@/app/lib/mongodb";
 import { getSession } from "@/app/lib/session";
 
@@ -77,6 +78,12 @@ export async function submitEnquiry(
 
   try {
     const db = await getDb();
+    if (await hasRecentSubmission("enquiries", { phone, message })) {
+      return {
+        error:
+          "You have already submitted this enquiry recently. Our team will get back to you soon.",
+      };
+    }
     await db.collection("enquiries").insertOne({
       ...enquiry,
       active: true,

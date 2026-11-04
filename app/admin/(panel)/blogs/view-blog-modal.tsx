@@ -1,21 +1,12 @@
 "use client";
 
+import { formatDateTime } from "@/app/lib/format-date";
 import Link from "next/link";
 import { useState } from "react";
 import { normalizeQuillHtml, type Blog } from "@/app/lib/blog-utils";
 
 function formatDate(iso: string | null) {
-  if (!iso) return null;
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return `${d.toLocaleDateString("en-IN", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  })}, ${d.toLocaleTimeString("en-IN", {
-    hour: "2-digit",
-    minute: "2-digit",
-  })}`;
+  return iso ? formatDateTime(iso) : null;
 }
 
 function Meta({ label, value }: { label: string; value: string | null }) {

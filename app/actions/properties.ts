@@ -12,6 +12,57 @@ export type CreatePropertyState =
 
 const S3_PREFIX = "properties";
 
+const MAX_THUMBNAIL_MB = 5;
+const MAX_IMAGES = 5;
+const MAX_IMAGE_MB = 5;
+const MAX_VIDEO_MB = 25;
+const MAX_BROCHURE_MB = 25;
+
+function mediaFiles(formData: FormData, key: string): File[] {
+  return formData
+    .getAll(key)
+    .filter((f): f is File => f instanceof File && f.size > 0);
+}
+
+function validateMediaFiles(formData: FormData): string | null {
+  const thumbnail = mediaFiles(formData, "thumbnail");
+  if (thumbnail.length > 1) {
+    return "Only one thumbnail image can be uploaded.";
+  }
+  if (thumbnail.some((f) => f.size > MAX_THUMBNAIL_MB * 1024 * 1024)) {
+    return `Thumbnail exceeds the ${MAX_THUMBNAIL_MB}MB limit.`;
+  }
+
+  const images = mediaFiles(formData, "images");
+  if (images.length > MAX_IMAGES) {
+    return `You can upload up to ${MAX_IMAGES} property images.`;
+  }
+  if (images.some((f) => f.size > MAX_IMAGE_MB * 1024 * 1024)) {
+    return `Each property image must be ${MAX_IMAGE_MB}MB or smaller.`;
+  }
+
+  const videos = mediaFiles(formData, "videos");
+  if (videos.length > 1) {
+    return "Only one video can be uploaded.";
+  }
+  if (videos.some((f) => f.size > MAX_VIDEO_MB * 1024 * 1024)) {
+    return `Video exceeds the ${MAX_VIDEO_MB}MB limit.`;
+  }
+
+  const brochures = mediaFiles(formData, "brochure");
+  if (brochures.length > 1) {
+    return "Only one brochure can be uploaded.";
+  }
+  if (brochures.some((f) => f.type !== "application/pdf")) {
+    return "Project brochure must be a PDF file.";
+  }
+  if (brochures.some((f) => f.size > MAX_BROCHURE_MB * 1024 * 1024)) {
+    return `Brochure exceeds the ${MAX_BROCHURE_MB}MB limit.`;
+  }
+
+  return null;
+}
+
 async function saveFiles(files: File[]): Promise<string[]> {
   return uploadFilesToS3(files, S3_PREFIX);
 }
@@ -25,14 +76,19 @@ function parsePropertyForm(formData: FormData) {
 
   const listingType = str("listingType");
   const isNewLaunch = listingType === "new_launch";
+  const isAuction = listingType === "auction";
   const parkingAvailable = str("parkingAvailable") === "yes";
 
   return {
     listingType,
     isNewLaunch,
     status: str("status") === "draft" ? "draft" : "published",
-    title: isNewLaunch ? str("projectName") : str("title"),
-    price: isNewLaunch ? num("startingFrom") : num("price"),
+    societyName: str("societyName"),
+    price: isNewLaunch
+      ? num("startingFrom")
+      : isAuction
+        ? num("reservePrice")
+        : num("price"),
     propertyType: str("propertyType") || null,
     floor: num("floor"),
     totalFloors: num("totalFloors"),
@@ -40,11 +96,17 @@ function parsePropertyForm(formData: FormData) {
     area: num("area"),
     areaUnit: str("areaUnit") || null,
     constructionStatus: str("constructionStatus") || null,
+    transactionType: str("transactionType") || null,
+    reraNumber: str("reraNumber") || null,
+    builderName: str("builderName") || null,
+    saleStatus: str("saleStatus") || null,
     deposit: num("deposit"),
     address: str("address") || null,
     city: str("city") || null,
     location: str("location") || null,
     furnishing: str("furnishing") || null,
+    buildingAge: str("buildingAge") || null,
+    facing: str("facing") || null,
     parking: parkingAvailable
       ? {
           available: true,
@@ -55,6 +117,11 @@ function parsePropertyForm(formData: FormData) {
     amenities: formData
       .getAll("amenities")
       .filter((a): a is string => typeof a === "string"),
+    highlights: formData
+      .getAll("highlights")
+      .filter((a): a is string => typeof a === "string")
+      .map((a) => a.trim())
+      .filter(Boolean),
     availableFor: formData
       .getAll("availableFor")
       .filter((a): a is string => typeof a === "string"),
@@ -64,24 +131,45 @@ function parsePropertyForm(formData: FormData) {
     sharingOption: str("sharingOption") || null,
     totalCapacity: str("totalCapacity") || null,
     possessionIn: str("possessionIn") || null,
+    suitableFor: str("suitableFor") || null,
+    leaseAmount: num("leaseAmount"),
+    rentalYield: num("rentalYield"),
+    totalLeaseTenure: str("totalLeaseTenure") || null,
+    balanceLeaseTenure: str("balanceLeaseTenure") || null,
+    tenantType: str("tenantType") || null,
+    possessionType: str("possessionType") || null,
+    reservePrice: num("reservePrice"),
+    emdAmount: num("emdAmount"),
+    emdDate: str("emdDate") || null,
+    inspectionDate: str("inspectionDate") || null,
+    bankName: str("bankName") || null,
   };
 }
 
 function validateProperty(parsed: ReturnType<typeof parsePropertyForm>) {
-  if (!["sale", "rent", "pg", "new_launch"].includes(parsed.listingType)) {
+  if (
+    !["sale", "rent", "pg", "new_launch", "preleased", "auction"].includes(
+      parsed.listingType,
+    )
+  ) {
     return "Please choose a listing type.";
   }
   // Drafts may be incomplete — only enforce title/price on publish.
   if (parsed.status === "published") {
-    if (!parsed.title) {
-      return parsed.isNewLaunch
-        ? "Project name is required."
-        : "Property title is required.";
+    if (!parsed.societyName) {
+      return "Society / project name is required.";
     }
     if (parsed.price === null || Number.isNaN(parsed.price) || parsed.price < 0) {
       return parsed.isNewLaunch
         ? "Please enter a valid starting price."
         : "Please enter a valid price.";
+    }
+    if (
+      parsed.transactionType === "Builder" &&
+      parsed.constructionStatus === "Under Construction" &&
+      !parsed.reraNumber
+    ) {
+      return "RERA registration number is required.";
     }
   }
   return null;
@@ -98,6 +186,9 @@ export async function createProperty(
   const parsed = parsePropertyForm(formData);
   const validationError = validateProperty(parsed);
   if (validationError) return { error: validationError };
+
+  const mediaError = validateMediaFiles(formData);
+  if (mediaError) return { error: mediaError };
 
   const db = await getDb();
 
@@ -145,7 +236,7 @@ export async function createProperty(
 
 export async function deletePropertyMedia(input: {
   propertyId: string;
-  field: "thumbnail" | "images" | "videos";
+  field: "thumbnail" | "images" | "videos" | "brochure";
   url: string;
 }): Promise<CreatePropertyState> {
   const session = await getSession();
@@ -162,8 +253,8 @@ export async function deletePropertyMedia(input: {
   if (!existing) return { error: "Property not found." };
 
   const set: Record<string, unknown> = { updatedAt: new Date() };
-  if (input.field === "thumbnail") {
-    set.thumbnail = null;
+  if (input.field === "thumbnail" || input.field === "brochure") {
+    set[input.field] = null;
   } else {
     const items = Array.isArray(existing[input.field])
       ? (existing[input.field] as string[])
@@ -188,7 +279,7 @@ export async function deletePropertyMedia(input: {
 
 export async function replacePropertyMedia(input: {
   propertyId: string;
-  field: "thumbnail" | "images" | "videos";
+  field: "thumbnail" | "images" | "videos" | "brochure";
   url: string;
   file: File;
 }): Promise<CreatePropertyState> {
@@ -196,6 +287,19 @@ export async function replacePropertyMedia(input: {
   if (!session) return { error: "Unauthorized. Please sign in again." };
   if (!ObjectId.isValid(input.propertyId)) {
     return { error: "Invalid property." };
+  }
+
+  const limitMb =
+    input.field === "videos"
+      ? MAX_VIDEO_MB
+      : input.field === "brochure"
+        ? MAX_BROCHURE_MB
+        : MAX_IMAGE_MB;
+  if (input.field === "brochure" && input.file.type !== "application/pdf") {
+    return { error: "Project brochure must be a PDF file." };
+  }
+  if (input.file.size > limitMb * 1024 * 1024) {
+    return { error: `File exceeds the ${limitMb}MB limit.` };
   }
 
   const db = await getDb();
@@ -216,8 +320,8 @@ export async function replacePropertyMedia(input: {
   if (!newUrl) return { error: "Upload failed — please try again." };
 
   const set: Record<string, unknown> = { updatedAt: new Date() };
-  if (input.field === "thumbnail") {
-    set.thumbnail = newUrl;
+  if (input.field === "thumbnail" || input.field === "brochure") {
+    set[input.field] = newUrl;
   } else if (input.field === "videos") {
     set.videos = [newUrl];
   } else {
@@ -292,6 +396,9 @@ export async function updateProperty(input: {
   const validationError = validateProperty(parsed);
   if (validationError) return { error: validationError };
 
+  const mediaError = validateMediaFiles(input.formData);
+  if (mediaError) return { error: mediaError };
+
   const db = await getDb();
   const propertyId = new ObjectId(input.propertyId);
   const existing = await db
@@ -299,6 +406,17 @@ export async function updateProperty(input: {
     .findOne({ _id: propertyId });
   if (!existing) {
     return { error: "Property not found." };
+  }
+
+  // Newly selected images append to the ones already stored —
+  // check the merged total before uploading anything.
+  const pickedImages = mediaFiles(input.formData, "images");
+  if (
+    (Array.isArray(existing.images) ? existing.images.length : 0) +
+      pickedImages.length >
+    MAX_IMAGES
+  ) {
+    return { error: `You can have up to ${MAX_IMAGES} property images.` };
   }
 
   try {
@@ -323,13 +441,18 @@ export async function updateProperty(input: {
       )
     )[0];
 
+    const mergedImages = [
+      ...(Array.isArray(existing.images) ? existing.images : []),
+      ...newImages,
+    ];
+
     await db.collection("properties").updateOne(
       { _id: propertyId },
       {
         $set: {
           ...parsed,
           thumbnail: newThumbnail ?? (existing.thumbnail ?? null),
-          images: newImages.length > 0 ? newImages : (existing.images ?? []),
+          images: mergedImages,
           videos: newVideos.length > 0 ? newVideos : (existing.videos ?? []),
           brochure: parsed.isNewLaunch
             ? (newBrochure ?? (existing.brochure ?? null))

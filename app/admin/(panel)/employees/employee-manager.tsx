@@ -1,5 +1,6 @@
 "use client";
 
+import { formatDateTime as formatCreated } from "@/app/lib/format-date";
 import { useActionState, useEffect, useState } from "react";
 import {
   createEmployee,
@@ -10,13 +11,6 @@ import type { Employee } from "@/app/lib/employees";
 const inputClass =
   "w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20";
 
-function formatCreated(iso: string | null) {
-  if (!iso) return "-";
-  const d = new Date(iso);
-  return Number.isNaN(d.getTime())
-    ? "-"
-    : `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
-}
 
 const TYPE_STYLES: Record<string, string> = {
   manager: "bg-purple-50 text-purple-700",

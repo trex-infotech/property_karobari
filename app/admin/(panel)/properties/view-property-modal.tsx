@@ -10,11 +10,19 @@ const inr = new Intl.NumberFormat("en-IN", {
   maximumFractionDigits: 0,
 });
 
+const dateFmt = new Intl.DateTimeFormat("en-IN", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+
 const listingLabels: Record<string, string> = {
   sale: "Sale",
   rent: "Rent",
   pg: "PG",
   new_launch: "New Launch",
+  preleased: "Preleased",
+  auction: "Auction",
 };
 
 function Detail({
@@ -44,6 +52,7 @@ export default function ViewPropertyModal({
   const isRentLike =
     property.listingType === "rent" || property.listingType === "pg";
   const isNewLaunch = property.listingType === "new_launch";
+  const isAuction = property.listingType === "auction";
   const priceLabel = isNewLaunch
     ? "Starting From"
     : isRentLike
@@ -66,7 +75,7 @@ export default function ViewPropertyModal({
             <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4">
               <div className="flex items-center gap-3">
                 <h2 className="text-lg font-semibold text-zinc-900">
-                  {property.title || "Untitled"}
+                  {property.societyName || "Untitled"}
                 </h2>
                 <span
                   className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium ${
@@ -108,12 +117,24 @@ export default function ViewPropertyModal({
                   value={listingLabels[property.listingType]}
                 />
                 <Detail label="Property type" value={property.propertyType} />
+                <Detail
+                  label="Transaction type"
+                  value={property.transactionType}
+                />
                 {!isNewLaunch && property.listingType !== "pg" && (
                   <Detail
                     label="Construction status"
                     value={property.constructionStatus}
                   />
                 )}
+                <Detail
+                  label="RERA Registration Number"
+                  value={property.reraNumber}
+                />
+                <Detail
+                  label="Builder / Developer"
+                  value={property.builderName}
+                />
                 <Detail label="Bedrooms" value={property.bedrooms} />
                 <Detail
                   label="Floor"
@@ -136,13 +157,16 @@ export default function ViewPropertyModal({
                   }
                 />
                 <Detail label="Furnishing" value={property.furnishing} />
+                <Detail label="Building Age" value={property.buildingAge} />
+                <Detail label="Facing" value={property.facing} />
                 <Detail
                   label={priceLabel}
                   value={
                     property.price !== null ? inr.format(property.price) : null
                   }
                 />
-                {isRentLike && (
+                {(property.listingType === "rent" ||
+                  property.listingType === "preleased") && (
                   <Detail
                     label="Deposit"
                     value={
@@ -152,8 +176,75 @@ export default function ViewPropertyModal({
                     }
                   />
                 )}
+                {isAuction && (
+                  <>
+                    <Detail
+                      label="Possession Type"
+                      value={property.possessionType}
+                    />
+                    <Detail
+                      label="EMD Amount"
+                      value={
+                        property.emdAmount !== null
+                          ? inr.format(property.emdAmount)
+                          : null
+                      }
+                    />
+                    <Detail label="EMD Date" value={property.emdDate} />
+                    <Detail
+                      label="Inspection Date"
+                      value={property.inspectionDate}
+                    />
+                    <Detail label="Name of Bank" value={property.bankName} />
+                  </>
+                )}
+                {property.listingType === "preleased" && (
+                  <>
+                    <Detail
+                      label="Suitable For"
+                      value={property.suitableFor}
+                    />
+                    <Detail
+                      label="Lease Amount"
+                      value={
+                        property.leaseAmount !== null
+                          ? inr.format(property.leaseAmount)
+                          : null
+                      }
+                    />
+                    <Detail
+                      label="Rental Yield YLY"
+                      value={
+                        property.rentalYield !== null
+                          ? `${property.rentalYield}%`
+                          : null
+                      }
+                    />
+                    <Detail
+                      label="Total Lease Tenure"
+                      value={property.totalLeaseTenure}
+                    />
+                    <Detail
+                      label="Balance Lease Tenure"
+                      value={property.balanceLeaseTenure}
+                    />
+                    <Detail
+                      label="Tenant Type"
+                      value={property.tenantType}
+                    />
+                  </>
+                )}
                 {isNewLaunch && (
-                  <Detail label="Possession In" value={property.possessionIn} />
+                  <>
+                    <Detail
+                      label="Sale Status"
+                      value={property.saleStatus}
+                    />
+                    <Detail
+                      label="Possession In"
+                      value={property.possessionIn}
+                    />
+                  </>
                 )}
                 {property.listingType === "pg" && (
                   <>
@@ -182,6 +273,14 @@ export default function ViewPropertyModal({
                     />
                   )}
                 <Detail label="City" value={property.city} />
+                <Detail
+                  label="Posted on"
+                  value={
+                    property.createdAt
+                      ? dateFmt.format(new Date(property.createdAt))
+                      : null
+                  }
+                />
                 <Detail label="Location" value={property.location} />
                 {!isNewLaunch && (
                   <Detail
@@ -208,6 +307,24 @@ export default function ViewPropertyModal({
                   <p className="mt-0.5 text-sm text-zinc-900">
                     {property.address}
                   </p>
+                </div>
+              )}
+
+              {property.highlights.length > 0 && (
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-zinc-500">
+                    Key Highlights
+                  </p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {property.highlights.map((highlight) => (
+                      <span
+                        key={highlight}
+                        className="rounded-full bg-zinc-100 px-3 py-1 text-sm text-zinc-700"
+                      >
+                        {highlight}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               )}
 

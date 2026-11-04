@@ -68,6 +68,16 @@ const tabs = [
     ),
   },
   {
+    href: "/admin/feedback",
+    label: "Feedback",
+    icon: (
+      <>
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+        <path d="M8 9h8M8 13h5" />
+      </>
+    ),
+  },
+  {
     href: "/admin/leads",
     label: "Leads",
     icon: (
@@ -76,6 +86,49 @@ const tabs = [
         <circle cx="9" cy="7" r="4" />
         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </>
+    ),
+  },
+  {
+    href: "/admin/loan-enquiries",
+    label: "Loan Enquiries",
+    icon: (
+      <>
+        <rect x="2" y="6" width="20" height="12" rx="2" />
+        <circle cx="12" cy="12" r="2" />
+        <path d="M6 12h.01M18 12h.01" />
+      </>
+    ),
+  },
+  {
+    href: "/admin/careers",
+    label: "Career Applications",
+    icon: (
+      <>
+        <rect x="2" y="7" width="20" height="14" rx="2" />
+        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+      </>
+    ),
+  },
+  {
+    href: "/admin/referrals",
+    label: "Referrals",
+    icon: (
+      <>
+        <circle cx="18" cy="5" r="3" />
+        <circle cx="6" cy="12" r="3" />
+        <circle cx="18" cy="19" r="3" />
+        <path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4" />
+      </>
+    ),
+  },
+  {
+    href: "/admin/interiors",
+    label: "Interior Enquiries",
+    icon: (
+      <>
+        <path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />
+        <path d="M9 22V12h6v10" />
       </>
     ),
   },
@@ -124,6 +177,7 @@ const tabs = [
 const SUPER_ADMIN_TABS = new Set([
   "/admin/blogs",
   "/admin/enquiries",
+  "/admin/feedback",
   "/admin/settings",
   "/admin/master",
 ]);
