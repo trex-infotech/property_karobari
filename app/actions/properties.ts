@@ -24,13 +24,15 @@ function mediaFiles(formData: FormData, key: string): File[] {
     .filter((f): f is File => f instanceof File && f.size > 0);
 }
 
+const FILE_SIZE_ERROR = "File size must not exceed 5 MB.";
+
 function validateMediaFiles(formData: FormData): string | null {
   const thumbnail = mediaFiles(formData, "thumbnail");
   if (thumbnail.length > 1) {
     return "Only one thumbnail image can be uploaded.";
   }
   if (thumbnail.some((f) => f.size > MAX_THUMBNAIL_MB * 1024 * 1024)) {
-    return `Thumbnail exceeds the ${MAX_THUMBNAIL_MB}MB limit.`;
+    return FILE_SIZE_ERROR;
   }
 
   const images = mediaFiles(formData, "images");
@@ -38,7 +40,7 @@ function validateMediaFiles(formData: FormData): string | null {
     return `You can upload up to ${MAX_IMAGES} property images.`;
   }
   if (images.some((f) => f.size > MAX_IMAGE_MB * 1024 * 1024)) {
-    return `Each property image must be ${MAX_IMAGE_MB}MB or smaller.`;
+    return FILE_SIZE_ERROR;
   }
 
   const videos = mediaFiles(formData, "videos");
@@ -299,7 +301,12 @@ export async function replacePropertyMedia(input: {
     return { error: "Project brochure must be a PDF file." };
   }
   if (input.file.size > limitMb * 1024 * 1024) {
-    return { error: `File exceeds the ${limitMb}MB limit.` };
+    return {
+      error:
+        input.field === "thumbnail" || input.field === "images"
+          ? FILE_SIZE_ERROR
+          : `File exceeds the ${limitMb}MB limit.`,
+    };
   }
 
   const db = await getDb();
