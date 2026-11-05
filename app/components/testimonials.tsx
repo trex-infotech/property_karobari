@@ -122,7 +122,7 @@ export default function Testimonials() {
 
   return (
     <section className="bg-linear-to-b from-white to-blue-50/40 py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="container mx-auto px-6">
         <div className="mx-auto mb-12 max-w-2xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-linear-to-r from-blue-100 to-blue-50 px-5 py-1.5 text-xs font-bold uppercase tracking-wide text-blue-600">
             <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />

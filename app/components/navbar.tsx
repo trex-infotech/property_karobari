@@ -13,7 +13,12 @@ const propertyLinks = [
   { href: "/properties/new-launch", label: "New Launch" },
 ];
 
-const navLinks: { href: string; label: string }[] = [];
+const navLinks = [
+  { href: "/properties/new-launch", label: "New Launch" },
+  { href: "/about", label: "About" },
+  { href: "/blogs", label: "Blogs" },
+  { href: "/contact", label: "Contact" },
+];
 
 const darkBannerRoutes = [
   "/about",
