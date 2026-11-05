@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Master | Admin",
 };
 
+// Reads MongoDB at request time.
+export const instant = false;
+
 export default async function AdminMasterPage() {
   const db = await getDb();
   const cities = await db
