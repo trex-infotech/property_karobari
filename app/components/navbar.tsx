@@ -20,20 +20,6 @@ const navLinks = [
   { href: "/contact", label: "Contact" },
 ];
 
-const darkBannerRoutes = [
-  "/about",
-  "/blogs",
-  "/career",
-  "/contact",
-  "/feedback",
-  "/interior",
-  "/loans",
-  "/preleased",
-  "/privacy-policy",
-  "/properties",
-  "/refer-n-earn",
-];
-
 const socialLinks = [
   {
     label: "Facebook",
@@ -111,35 +97,26 @@ export default function Navbar() {
   const [mobilePropertiesOpen, setMobilePropertiesOpen] = useState(false);
   const [desktopPropertiesOpen, setDesktopPropertiesOpen] = useState(false);
   const propertiesActive = isActive(pathname, "/properties");
-  const onDarkBanner = darkBannerRoutes.some((route) =>
-    isActive(pathname, route),
-  );
 
   if (pathname.startsWith("/admin")) return null;
 
   return (
-    <header className="fixed inset-x-0 top-3 z-50 px-3 sm:px-4">
-      <span
-        className={`absolute -top-1 right-6 text-[11px] font-bold leading-none tracking-wide sm:right-8 sm:text-xs ${
-          onDarkBanner
-            ? "text-white [text-shadow:0_1px_3px_rgba(0,0,0,0.55)]"
-            : "text-[#172554]"
-        }`}
-      >
-        MahaRERA Agent Reg. No.: A031242605002
-      </span>
-      <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between rounded-full border border-zinc-200 bg-white/90 px-4 shadow-lg backdrop-blur sm:h-16 sm:px-5">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-zinc-200 bg-white px-3 sm:px-4">
+      <nav className="mx-auto mb-2 mt-2 flex h-14 max-w-6xl items-center justify-between rounded-full border border-zinc-200 bg-white/90 px-4 shadow-lg backdrop-blur sm:h-16 sm:px-5">
         <Link
           href="/"
-          className="flex items-center gap-2"
+          className="-ml-2 flex flex-col items-start"
           onClick={() => setMobileOpen(false)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/property-karobari-logo-mark.png"
             alt="Property Karobari"
-            className="-mt-4 -ml-2 h-12 w-auto object-contain sm:h-14"
+            className="-mt-3 ml-3 h-10 w-auto object-contain sm:h-12"
           />
+          <span className="mt-0.5 text-[8px] font-bold leading-none tracking-wide text-[#172554] sm:text-[9px]">
+            MahaRERA Agent Reg. No.: A031242605002
+          </span>
         </Link>
 
         <div className="hidden items-center gap-0.5 md:-ml-6 md:flex">

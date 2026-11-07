@@ -117,19 +117,19 @@ export default async function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div>
-            <Link href="/" className="-mt-2 flex justify-center">
+            <Link href="/" className="flex justify-start">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/property-karobari-logo.png"
+                src="/property-karobari-logo-footer.png"
                 alt="Property Karobari"
-                className="h-auto w-full max-w-[300px] object-contain"
+                className="h-auto w-full max-w-[220px] rounded-xl bg-white object-contain p-1 shadow-sm"
               />
             </Link>
-            <p className="mt-2 max-w-xs text-center text-sm leading-relaxed text-blue-200">
+            <p className="mt-2 max-w-xs text-left text-sm leading-relaxed text-blue-200">
               Buy, rent, or find a PG — explore verified properties across top
               cities.
             </p>
-            <div className="mt-1 flex justify-center gap-3">
+            <div className="mt-1 flex justify-start gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
