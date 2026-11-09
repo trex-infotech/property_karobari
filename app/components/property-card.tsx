@@ -33,7 +33,7 @@ export default function PropertyCard({
   return (
     <Link
       href={href}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-blue-100/50 bg-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-blue-100/50 bg-white shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
     >
       <div className="relative aspect-3/2 bg-blue-50">
         {property.thumbnail ? (

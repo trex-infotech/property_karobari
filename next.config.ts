@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
   },
   cacheComponents: true,
   partialPrefetching: true,
+  // Allow phones testing via LAN IP or an ngrok tunnel to load dev assets/HMR.
+  allowedDevOrigins: [
+    "192.168.0.105",
+    "100.82.88.116",
+    "*.ngrok-free.dev",
+  ],
   turbopack: {
     rules: {
       "*.css": {

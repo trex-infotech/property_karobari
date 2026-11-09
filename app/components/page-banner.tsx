@@ -45,7 +45,7 @@ export default function PageBanner({
         />
       </svg>
 
-      <div className="relative mx-auto max-w-4xl px-4 pb-14 pt-28 text-center sm:pb-16 sm:pt-32">
+      <div className="relative mx-auto max-w-4xl px-4 pb-14 pt-32 text-center sm:pb-16 sm:pt-36">
         {breadcrumb && breadcrumb.length > 0 && (
           <nav
             aria-label="Breadcrumb"

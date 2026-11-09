@@ -5,7 +5,7 @@ import { submitLoanEnquiry } from "@/app/actions/loan-enquiries";
 import { LOAN_TYPES } from "@/app/lib/loan-enquiry-constants";
 
 const inputClass =
-  "w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20";
+  "w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-base text-zinc-900 outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 md:text-sm";
 
 const labelClass = "mb-1 block text-sm font-medium text-zinc-700";
 
@@ -38,7 +38,7 @@ function LoanEnquiryModal({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex overflow-y-auto p-4">
       <div
         className="absolute inset-0 bg-black/60"
         onClick={onClose}
@@ -50,7 +50,7 @@ function LoanEnquiryModal({
         aria-modal="true"
         aria-labelledby="loan-enquiry-title"
         tabIndex={-1}
-        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl outline-none sm:p-8"
+        className="relative m-auto max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl outline-none sm:p-8"
       >
         <button
           type="button"

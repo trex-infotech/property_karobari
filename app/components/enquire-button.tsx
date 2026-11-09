@@ -4,7 +4,7 @@ import { useActionState, useEffect, useState } from "react";
 import { submitPropertyEnquiry } from "@/app/actions/enquiries";
 
 const inputClass =
-  "w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-sm text-zinc-900 outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20";
+  "w-full rounded-lg border border-zinc-300 px-3 py-2.5 text-base text-zinc-900 outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 md:text-sm";
 
 const contactMethods = ["Call", "WhatsApp", "SMS"];
 const contactTimes = [
@@ -45,14 +45,14 @@ function EnquiryModal({
 
   return (
     <div
-      className="fixed inset-0 z-60 flex items-center justify-center bg-zinc-950/50 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-60 flex overflow-y-auto bg-zinc-950/50 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Enquire now"
-        className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl sm:p-8"
+        className="m-auto max-h-[calc(100dvh-2rem)] w-full max-w-md overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         {state?.success ? (

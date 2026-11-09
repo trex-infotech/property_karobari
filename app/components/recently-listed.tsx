@@ -69,9 +69,14 @@ export default async function RecentlyListed() {
                   </svg>
                 </Link>
               </div>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 scrollbar-none sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:pb-0 lg:grid-cols-4">
                 {row.properties.map((property) => (
-                  <PropertyCard key={property.id} property={property} />
+                  <div
+                    key={property.id}
+                    className="w-[80%] shrink-0 snap-start sm:w-auto"
+                  >
+                    <PropertyCard property={property} />
+                  </div>
                 ))}
               </div>
             </div>

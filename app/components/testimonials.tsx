@@ -145,6 +145,15 @@ export default function Testimonials() {
           onMouseLeave={() => {
             pausedRef.current = false;
           }}
+          onTouchStart={() => {
+            pausedRef.current = true;
+          }}
+          onTouchEnd={() => {
+            // Keep paused briefly to cover momentum scrolling after the finger lifts.
+            window.setTimeout(() => {
+              pausedRef.current = false;
+            }, 1500);
+          }}
           className="scrollbar-none flex gap-6 overflow-x-auto pb-8 pt-6"
         >
           {testimonials.map((t) => (

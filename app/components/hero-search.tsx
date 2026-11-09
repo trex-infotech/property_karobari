@@ -60,7 +60,7 @@ const budgetsByTab: Record<string, BudgetOption[]> = {
 };
 
 const fieldClass =
-  "w-full bg-transparent text-sm font-semibold text-zinc-900 outline-none";
+  "w-full bg-transparent text-base font-semibold text-zinc-900 outline-none md:text-sm";
 
 function PillSelect({
   value,
@@ -78,7 +78,7 @@ function PillSelect({
 
   useEffect(() => {
     if (!open) return;
-    function onDown(e: MouseEvent) {
+    function onDown(e: MouseEvent | TouchEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
       }
@@ -87,9 +87,11 @@ function PillSelect({
       if (e.key === "Escape") setOpen(false);
     }
     document.addEventListener("mousedown", onDown);
+    document.addEventListener("touchstart", onDown, { passive: true });
     document.addEventListener("keydown", onKey);
     return () => {
       document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("touchstart", onDown);
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);

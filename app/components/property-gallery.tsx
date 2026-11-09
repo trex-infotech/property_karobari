@@ -325,7 +325,7 @@ export default function PropertyGallery({
             src={images[openIndex]}
             alt={`${title} — image ${openIndex + 1}`}
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[85vh] max-w-full rounded-lg object-contain"
+            className="max-h-[85dvh] max-w-full rounded-lg object-contain"
           />
 
           {openIndex < images.length - 1 && (

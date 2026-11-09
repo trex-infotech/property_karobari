@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { logout } from "@/app/actions/auth";
 
 function Icon({ path }: { path: React.ReactNode }) {
@@ -201,6 +201,26 @@ function isActive(pathname: string, href: string) {
 export default function AdminSidebar({ rank }: { rank: number }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mobileRef = useRef<HTMLDivElement>(null);
+
+  // Close the mobile admin menu on outside tap/click.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    function onDown(e: MouseEvent | TouchEvent) {
+      if (
+        mobileRef.current &&
+        !mobileRef.current.contains(e.target as Node)
+      ) {
+        setMobileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("touchstart", onDown, { passive: true });
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("touchstart", onDown);
+    };
+  }, [mobileOpen]);
 
   const nav = (
     <nav className="flex-1 space-y-1 px-3 py-4">
@@ -239,16 +259,17 @@ export default function AdminSidebar({ rank }: { rank: number }) {
 
   return (
     <>
-      {/* Mobile top bar */}
-      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-3 md:hidden">
-        <span className="text-sm font-semibold text-zinc-900">Admin Panel</span>
-        <button
-          type="button"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-zinc-600 hover:bg-zinc-100"
-          aria-expanded={mobileOpen}
-          aria-label="Toggle admin menu"
-          onClick={() => setMobileOpen((open) => !open)}
-        >
+      {/* Mobile top bar + menu */}
+      <div ref={mobileRef} className="md:hidden">
+        <div className="sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white px-4 py-3">
+          <span className="text-sm font-semibold text-zinc-900">Admin Panel</span>
+          <button
+            type="button"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-zinc-600 hover:bg-zinc-100"
+            aria-expanded={mobileOpen}
+            aria-label="Toggle admin menu"
+            onClick={() => setMobileOpen((open) => !open)}
+          >
           {mobileOpen ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -281,16 +302,17 @@ export default function AdminSidebar({ rank }: { rank: number }) {
               <line x1="4" x2="20" y1="18" y2="18" />
             </svg>
           )}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div className="flex flex-col border-b border-zinc-200 bg-white md:hidden">
-          {nav}
-          {footer}
+          </button>
         </div>
-      )}
+
+        {/* Mobile menu */}
+        {mobileOpen && (
+          <div className="flex flex-col border-b border-zinc-200 bg-white">
+            {nav}
+            {footer}
+          </div>
+        )}
+      </div>
 
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 flex-col border-r border-zinc-200 bg-white md:sticky md:top-0 md:flex md:h-screen md:overflow-y-auto">

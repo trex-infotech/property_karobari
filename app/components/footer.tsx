@@ -238,7 +238,7 @@ export default async function Footer() {
                     }
                   />
                 </span>
-                +91 98765 43210
+                +91 98922 04806
               </li>
               <li className="flex items-start gap-3">
                 <span className="mt-0.5 text-blue-400">

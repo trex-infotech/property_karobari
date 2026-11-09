@@ -104,7 +104,7 @@ function Detail({
   return (
     <div>
       <p className="text-xs uppercase tracking-wide text-zinc-500">{label}</p>
-      <p className="mt-0.5 text-sm font-medium text-zinc-900">
+      <div className="mt-0.5 text-sm font-medium text-zinc-900">
         {locked ? (
           enquiry ? (
             <EnquireTrigger {...enquiry} className="inline-flex cursor-pointer">
@@ -116,7 +116,7 @@ function Detail({
         ) : (
           value
         )}
-      </p>
+      </div>
     </div>
   );
 }
