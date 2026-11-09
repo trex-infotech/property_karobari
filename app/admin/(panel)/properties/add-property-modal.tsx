@@ -3241,33 +3241,35 @@ export default function AddPropertyModal({
                 </>
               )}
 
-              {!isNewLaunch && (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <div>
-                    <label className={`${labelClass} sm:min-h-10`}>
-                      Thumbnail Image (Max 5 MB – 1 Image Only)
-                    </label>
-                    <input
-                      name="thumbnail"
-                      type="file"
-                      accept="image/*"
-                      className={inputClass}
-                    />
-                  </div>
+              <div
+                className={`grid grid-cols-1 gap-4 ${isNewLaunch ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}
+              >
+                <div>
+                  <label className={`${labelClass} sm:min-h-10`}>
+                    Thumbnail Image (Max 5 MB – 1 Image Only)
+                  </label>
+                  <input
+                    name="thumbnail"
+                    type="file"
+                    accept="image/*"
+                    className={inputClass}
+                  />
+                </div>
 
-                  <div>
-                    <label className={`${labelClass} sm:min-h-10`}>
-                      {isAuction
-                        ? "Property Images / Sale Notice PDF (Max 5 – 5 MB Each)"
-                        : "Property Images (Max 5 Images – 5 MB Each)"}
-                    </label>
-                    <PropertyImagesInput
-                      existingImages={property?.images ?? []}
-                      propertyId={property?.id}
-                      allowPdf={isAuction}
-                    />
-                  </div>
+                <div>
+                  <label className={`${labelClass} sm:min-h-10`}>
+                    {isAuction
+                      ? "Property Images / Sale Notice PDF (Max 5 – 5 MB Each)"
+                      : "Property Images (Max 5 Images – 5 MB Each)"}
+                  </label>
+                  <PropertyImagesInput
+                    existingImages={property?.images ?? []}
+                    propertyId={property?.id}
+                    allowPdf={isAuction}
+                  />
+                </div>
 
+                {!isNewLaunch && (
                   <div>
                     <label className={`${labelClass} sm:min-h-10`}>
                       Property Video (Max 25 MB)
@@ -3279,8 +3281,8 @@ export default function AddPropertyModal({
                       className={inputClass}
                     />
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               {isEdit && hasExistingMedia && (
                 <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4">

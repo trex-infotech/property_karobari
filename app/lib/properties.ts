@@ -21,8 +21,14 @@ function serialize(
   const parking = (doc.parking ?? {}) as Record<string, unknown>;
   const arr = (value: unknown) =>
     Array.isArray(value) ? (value as string[]) : [];
-  const numOrNull = (value: unknown) =>
-    typeof value === "number" ? value : null;
+  const numOrNull = (value: unknown) => {
+    if (typeof value === "number") return Number.isFinite(value) ? value : null;
+    if (typeof value === "string" && value.trim() !== "") {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+    return null;
+  };
   const strOrNull = (value: unknown) =>
     typeof value === "string" ? value : null;
 
@@ -54,7 +60,9 @@ function serialize(
     sharingOption: strOrNull(doc.sharingOption),
     totalCapacity: strOrNull(doc.totalCapacity),
     possessionIn: strOrNull(doc.possessionIn),
-    startingFrom: numOrNull(doc.startingFrom),
+    startingFrom:
+      numOrNull(doc.startingFrom) ??
+      (doc.listingType === "new_launch" ? numOrNull(doc.price) : null),
     suitableFor: strOrNull(doc.suitableFor),
     leaseAmount: numOrNull(doc.leaseAmount),
     rentalYield: numOrNull(doc.rentalYield),

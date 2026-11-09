@@ -15,9 +15,9 @@ const propertyLinks = [
 
 const navLinks = [
   { href: "/properties/new-launch", label: "New Launch" },
-  { href: "/about", label: "About" },
-  { href: "/blogs", label: "Blogs" },
-  { href: "/contact", label: "Contact" },
+  { href: "/properties/preleased", label: "Preleased" },
+  { href: "/properties/auction", label: "Auction" },
+  { href: "/loans", label: "Loans" },
 ];
 
 const socialLinks = [
@@ -91,7 +91,11 @@ function SocialIcon({ path }: { path: React.ReactNode }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({
+  heroBackground,
+}: {
+  heroBackground?: { desktop: string | null; mobile: string | null } | null;
+}) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobilePropertiesOpen, setMobilePropertiesOpen] = useState(false);
@@ -100,9 +104,19 @@ export default function Navbar() {
 
   if (pathname.startsWith("/admin")) return null;
 
+  // On the homepage the hero image renders behind the transparent header —
+  // no separate background layer or boundary.
+  const hasHero = Boolean(
+    pathname === "/" && (heroBackground?.desktop || heroBackground?.mobile),
+  );
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-zinc-200 bg-white px-3 sm:px-4">
-      <nav className="mx-auto mb-2 mt-2 flex h-14 max-w-6xl items-center justify-between rounded-full border border-zinc-200 bg-white/90 px-4 shadow-lg backdrop-blur sm:h-16 sm:px-5">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 border-b px-3 sm:px-4 ${
+        hasHero ? "border-transparent" : "border-zinc-200 bg-white"
+      }`}
+    >
+      <nav className="relative mx-auto mb-3 mt-3 flex h-20 max-w-6xl items-center justify-between rounded-full border border-zinc-200 bg-white/90 px-4 shadow-lg backdrop-blur sm:h-22 sm:px-5">
         <Link
           href="/"
           className="-ml-2 flex flex-col items-start"
@@ -112,7 +126,7 @@ export default function Navbar() {
           <img
             src="/property-karobari-logo-mark.png"
             alt="Property Karobari"
-            className="-mt-3 ml-3 h-10 w-auto object-contain sm:h-12"
+            className="-mt-4 ml-3 h-12 w-auto object-contain sm:h-15"
           />
           <span className="mt-0.5 text-[8px] font-bold leading-none tracking-wide text-[#172554] sm:text-[9px]">
             MahaRERA Agent Reg. No.: A031242605002
@@ -231,7 +245,7 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="mx-auto mt-2 max-w-6xl rounded-2xl border border-zinc-200 bg-white px-4 py-3 shadow-lg md:hidden">
+        <div className="relative mx-auto mt-2 max-w-6xl rounded-2xl border border-zinc-200 bg-white px-4 py-3 shadow-lg md:hidden">
           <div className="space-y-1">
             <button
               type="button"

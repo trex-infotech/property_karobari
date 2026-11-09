@@ -40,8 +40,14 @@ function toPropertyRecord(
   const parking = (property.parking ?? {}) as Record<string, unknown>;
   const arr = (value: unknown) =>
     Array.isArray(value) ? (value as string[]) : [];
-  const numOrNull = (value: unknown) =>
-    typeof value === "number" ? value : null;
+  const numOrNull = (value: unknown) => {
+    if (typeof value === "number") return Number.isFinite(value) ? value : null;
+    if (typeof value === "string" && value.trim() !== "") {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+    return null;
+  };
   const strOrNull = (value: unknown) =>
     typeof value === "string" ? value : null;
 
@@ -74,7 +80,11 @@ function toPropertyRecord(
     sharingOption: strOrNull(property.sharingOption),
     totalCapacity: strOrNull(property.totalCapacity),
     possessionIn: strOrNull(property.possessionIn),
-    startingFrom: numOrNull(property.startingFrom),
+    startingFrom:
+      numOrNull(property.startingFrom) ??
+      (property.listingType === "new_launch"
+        ? numOrNull(property.price)
+        : null),
     suitableFor: strOrNull(property.suitableFor),
     leaseAmount: numOrNull(property.leaseAmount),
     rentalYield: numOrNull(property.rentalYield),

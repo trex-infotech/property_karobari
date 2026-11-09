@@ -102,6 +102,7 @@ function parsePropertyForm(formData: FormData) {
     reraNumber: str("reraNumber") || null,
     builderName: str("builderName") || null,
     saleStatus: str("saleStatus") || null,
+    startingFrom: num("startingFrom"),
     deposit: num("deposit"),
     address: str("address") || null,
     city: str("city") || null,

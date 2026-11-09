@@ -3,20 +3,49 @@ import PropertyTypeGrid from "./components/property-type-grid";
 import RecentlyListed from "./components/recently-listed";
 import Testimonials from "./components/testimonials";
 import { getCities } from "./lib/cities";
+import { getHeroBackground } from "./lib/hero-background";
 
 // Reads MongoDB at request time.
 export const instant = false;
 
 export default async function Home() {
-  const cities = await getCities();
+  const [cities, hero] = await Promise.all([
+    getCities(),
+    getHeroBackground(),
+  ]);
+  const heroDesktop = hero.desktop ?? hero.mobile;
+  const heroMobile = hero.mobile ?? hero.desktop;
 
   return (
     <>
       <section className="relative bg-linear-to-br from-blue-50 via-white to-blue-100/60 text-zinc-900">
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.12),transparent_60%)]"
-          aria-hidden="true"
-        />
+        {heroDesktop || heroMobile ? (
+          <>
+            {heroDesktop && (
+              <div
+                className="absolute inset-0 hidden bg-cover bg-no-repeat md:block"
+                style={{ backgroundImage: `url(${heroDesktop})`, backgroundPosition: "center 45%" }}
+                aria-hidden="true"
+              />
+            )}
+            {heroMobile && (
+              <div
+                className="absolute inset-0 bg-cover bg-no-repeat md:hidden"
+                style={{ backgroundImage: `url(${heroMobile})`, backgroundPosition: "center 45%" }}
+                aria-hidden="true"
+              />
+            )}
+            <div
+              className="pointer-events-none absolute inset-0 bg-linear-to-br from-blue-50/75 via-white/60 to-blue-100/55"
+              aria-hidden="true"
+            />
+          </>
+        ) : (
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.12),transparent_60%)]"
+            aria-hidden="true"
+          />
+        )}
         <div className="relative mx-auto max-w-4xl px-4 pb-20 pt-32 text-center sm:pb-28 sm:pt-36">
           <div className="inline-flex items-center gap-3 sm:gap-4">
             <span className="text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">
